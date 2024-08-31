@@ -1,0 +1,14 @@
+/* SelectTracks.css */
+
+.track-title, .track-artist {
+    max-width: 300px; /* Set a maximum width for the text */
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Hide any overflow */
+    text-overflow: ellipsis; /* Show ellipsis (...) for overflow */
+    margin: 0 auto; /* Center the text */
+  }
+  
+  .rhap_time {
+    color: #ffffff !important; /* Make the duration text light */
+  }
+  

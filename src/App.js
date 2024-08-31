@@ -3,9 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './components/Login';
 import Callback from './components/Callback';
-import PlaylistOptions from './components/PlaylistOptions';  // Import PlaylistOptions component
-import CreatePlaylist from './components/CreatePlaylist';    // Import CreatePlaylist component
-import EditPlaylist from './components/EditPlaylist';        // Import EditPlaylist component
+import PlaylistOptions from './components/PlaylistOptions';
+import CreatePlaylist from './components/CreatePlaylist';
+import EditPlaylist from './components/EditPlaylist';
+import SelectTracks from './components/SelectTracks'; // Import SelectTracks component
+import PlaylistCreated from './components/PlaylistCreated'; // Import PlaylistCreated component
 import './App.css'; // Import custom CSS for dark theme
 
 const App = () => {
@@ -21,11 +23,12 @@ const App = () => {
   return (
     <Router>
       <Routes>
+        {/* Existing routes */}
         <Route path="/" element={<Login />} />
         <Route path="/callback" element={<Callback setAccessToken={setAccessToken} />} />
         <Route
           path="/playlists"
-          element={accessToken ? <PlaylistOptions /> : <Navigate to="/" />} // Ensure this route is correctly mapped
+          element={accessToken ? <PlaylistOptions /> : <Navigate to="/" />}
         />
         <Route
           path="/create-playlist"
@@ -34,6 +37,16 @@ const App = () => {
         <Route
           path="/edit-playlist"
           element={accessToken ? <EditPlaylist accessToken={accessToken} /> : <Navigate to="/" />}
+        />
+        {/* Route for SelectTracks component */}
+        <Route
+          path="/select-tracks"
+          element={accessToken ? <SelectTracks accessToken={accessToken} playlistName="Your Playlist Name" playlistDescription="Your Playlist Description" /> : <Navigate to="/" />}
+        />
+        {/* New route for PlaylistCreated component */}
+        <Route
+          path="/playlist-created"
+          element={<PlaylistCreated />}
         />
       </Routes>
     </Router>
