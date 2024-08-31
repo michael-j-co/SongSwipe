@@ -1,0 +1,51 @@
+/* src/App.css */
+
+body {
+  background-color: #121212 !important; /* Dark background */
+  color: #e0e0e0 !important; /* Light text color */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Navbar styles */
+.navbar {
+  background-color: #1f1f1f; /* Dark navbar */
+  border-bottom: 1px solid #333; /* Subtle border for separation */
+}
+
+/* Card styles */
+.card {
+  background-color: #1f1f1f !important; /* Dark card background */
+  border: none; /* Remove default border */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+}
+
+.card-title, .card-body {
+  color: #e0e0e0 !important; /* Light text */
+}
+
+.card-img-top {
+  border-bottom: 1px solid #333; /* Border between image and card body */
+}
+
+/* Button styles */
+.btn-success {
+  background-color: #28a745; /* Green color for success buttons */
+  border: none; /* Remove button border */
+  border-radius: 50px; /* Rounded buttons */
+  color: #ffffff; /* White button text */
+  transition: background-color 0.3s; /* Smooth transition */
+}
+
+.btn-success:hover {
+  background-color: #218838; /* Slightly darker green on hover */
+}
+
+/* Modal styles */
+.modal-content {
+  background-color: #1f1f1f; /* Dark modal background */
+  color: #e0e0e0; /* Light modal text */
+  border: none; /* Remove default border */
+}
