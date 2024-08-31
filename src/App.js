@@ -8,6 +8,7 @@ import CreatePlaylist from './components/CreatePlaylist';
 import EditPlaylist from './components/EditPlaylist';
 import SelectTracks from './components/SelectTracks'; // Import SelectTracks component
 import PlaylistCreated from './components/PlaylistCreated'; // Import PlaylistCreated component
+import Header from './components/Header'; // Import Header component
 import './App.css'; // Import custom CSS for dark theme
 
 const App = () => {
@@ -22,6 +23,8 @@ const App = () => {
 
   return (
     <Router>
+      {/* Include Header on all pages */}
+      <Header />
       <Routes>
         {/* Existing routes */}
         <Route path="/" element={<Login />} />
