@@ -35,7 +35,7 @@ const CreatePlaylistForm = ({ accessToken }) => {
         <Form.Group className="mb-3">
           <Form.Check type="checkbox" label="Public" checked={isPublic} onChange={(e) => setIsPublic(e.target.checked)} />
         </Form.Group>
-        <Button variant="primary" onClick={handleNext}>
+        <Button variant="success" onClick={handleNext}>
           Next
         </Button>
       </Form>
