@@ -2,6 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Navbar, Container } from 'react-bootstrap';
+import './Header.css'; // Import custom CSS for styling
 
 const Header = () => {
   const navigate = useNavigate();
@@ -14,14 +15,12 @@ const Header = () => {
   };
 
   return (
-    <Navbar bg="dark" variant="dark" className="mb-4">
-      <Container>
-        {/* Button for PlaylistBuddy at the top left */}
-        <Navbar.Brand>
-          <Button variant="outline-light" onClick={handleHomeClick}>
-            PlaylistBuddy
-          </Button>
-        </Navbar.Brand>
+    <Navbar bg="dark" variant="dark" className="header-navbar">
+      <Container fluid className="p-0">
+        {/* Button for PlaylistBuddy at the very top left */}
+        <Button variant="outline-light" onClick={handleHomeClick} className="playlist-buddy-button">
+          PlaylistBuddy
+        </Button>
       </Container>
     </Navbar>
   );
