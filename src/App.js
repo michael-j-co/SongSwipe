@@ -4,11 +4,12 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './components/Login';
 import Callback from './components/Callback';
 import PlaylistOptions from './components/PlaylistOptions';
-import CreatePlaylist from './components/CreatePlaylist';
+import CreatePlaylistForm from './components/CreatePlaylistForm'; // Import CreatePlaylistForm component
+import SearchAndSelectPlaylists from './components/SearchAndSelectPlaylists'; // Import SearchAndSelectPlaylists component
 import EditPlaylist from './components/EditPlaylist';
-import SelectTracks from './components/SelectTracks'; // Import SelectTracks component
-import PlaylistCreated from './components/PlaylistCreated'; // Import PlaylistCreated component
-import Header from './components/Header'; // Import Header component
+import SelectTracks from './components/SelectTracks';
+import PlaylistCreated from './components/PlaylistCreated';
+import Header from './components/Header';
 import './App.css'; // Import custom CSS for dark theme
 
 const App = () => {
@@ -33,9 +34,15 @@ const App = () => {
           path="/playlists"
           element={accessToken ? <PlaylistOptions /> : <Navigate to="/" />}
         />
+        {/* Route for CreatePlaylistForm component */}
         <Route
-          path="/create-playlist"
-          element={accessToken ? <CreatePlaylist accessToken={accessToken} /> : <Navigate to="/" />}
+          path="/create-playlist-form"
+          element={accessToken ? <CreatePlaylistForm accessToken={accessToken} /> : <Navigate to="/" />}
+        />
+        {/* Route for SearchAndSelectPlaylists component */}
+        <Route
+          path="/search-playlists"
+          element={accessToken ? <SearchAndSelectPlaylists /> : <Navigate to="/" />}
         />
         <Route
           path="/edit-playlist"
@@ -46,7 +53,7 @@ const App = () => {
           path="/select-tracks"
           element={accessToken ? <SelectTracks accessToken={accessToken} playlistName="Your Playlist Name" playlistDescription="Your Playlist Description" /> : <Navigate to="/" />}
         />
-        {/* New route for PlaylistCreated component */}
+        {/* Route for PlaylistCreated component */}
         <Route
           path="/playlist-created"
           element={<PlaylistCreated />}

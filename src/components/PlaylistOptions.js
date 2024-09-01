@@ -7,7 +7,7 @@ const PlaylistOptions = () => {
   const navigate = useNavigate();
 
   const handleCreatePlaylist = () => {
-    navigate('/create-playlist');
+    navigate('/create-playlist-form');
   };
 
   const handleEditPlaylist = () => {
