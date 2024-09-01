@@ -77,16 +77,54 @@ const SelectTracks = ({ accessToken }) => {
     }
   };
 
-  const handleSkipToNextPlaylist = () => {
+  const handleSkipToNextPlaylist = async () => {
     if (currentPlaylistIndex + 1 < selectedPlaylists.length) {
-      setActionHistory([...actionHistory, { type: 'skip', playlistIndex: currentPlaylistIndex, trackIndex: currentTrackIndex }]); // Store action in history
-      setCurrentPlaylistIndex(currentPlaylistIndex + 1);
-      fetchTracksFromSelectedPlaylists();
+      const nextPlaylistIndex = currentPlaylistIndex + 1; // Determine the next playlist index
+      
+      // Fetch the tracks for the next playlist before updating the index
+      const tracksFetched = await fetchTracksForPlaylist(nextPlaylistIndex);
+      
+      if (tracksFetched) {  // Only update if tracks are fetched successfully
+        setActionHistory([
+          ...actionHistory,
+          { type: 'skip', playlistIndex: currentPlaylistIndex, trackIndex: currentTrackIndex },
+        ]);
+        setCurrentPlaylistIndex(nextPlaylistIndex); // Now update the playlist index
+        setCurrentTrackIndex(0); // Reset the track index to 0 for the new playlist
+      }
     } else {
       alert('You have reviewed all selected playlists!');
     }
   };
+  // Fetch tracks for a specific playlist index
+  const fetchTracksForPlaylist = async (playlistIndex) => {
+    if (!accessToken) {
+      alert('Token is invalid or expired. Please log in again.');
+      return false;
+    }
 
+    const currentPlaylist = selectedPlaylists[playlistIndex];
+
+    try {
+      const response = await axios.get(`https://api.spotify.com/v1/playlists/${currentPlaylist.id}/tracks`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const allTracks = response.data.items
+        .map((item) => item.track)
+        .filter((track) => track && !seenTracks.has(track.id));
+
+      setTracks(allTracks); // Update the tracks state
+      return true;  // Indicate successful fetch
+    } catch (error) {
+      console.error('Error fetching tracks:', error.response?.data || error);
+      alert('Error fetching tracks. Please try again.');
+      return false;  // Indicate failure
+    }
+  };
+  
   const handleUndo = () => {
     if (actionHistory.length > 0) {
       const lastAction = actionHistory[actionHistory.length - 1]; // Get the last action

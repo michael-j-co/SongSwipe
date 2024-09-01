@@ -1,6 +1,7 @@
 /* src/components/Login.css */
 body {
     background-color: #222; /* Dark background for the app */
+    font-family: 'Noto Sans', sans-serif; /* Apply Noto Sans font */
   }
   
   .welcome-section {
@@ -17,26 +18,31 @@ body {
   .steps-section h5 {
     color: #00d95f; /* Spotify green for step headers */
     margin-bottom: 0.5rem;
+    font-family: 'Noto Sans', sans-serif; /* Ensure font consistency */
   }
   
   .steps-section p {
     font-size: 1rem;
     color: #ddd; /* Light gray text for descriptions */
+    font-family: 'Noto Sans', sans-serif; /* Ensure font consistency */
   }
   
   .spotify-credibility {
     text-align: center;
     color: white; /* White text for better readability */
+    font-family: 'Noto Sans', sans-serif; /* Ensure font consistency */
   }
   
   .text-muted {
     color: #ffffff; /* White text for better readability */
+    font-family: 'Noto Sans', sans-serif; /* Ensure font consistency */
   }
   
   .welcome-section p {
     font-size: 1.2rem;
     color: #ffffff; /* White text for better readability */
     margin-bottom: 2rem;
+    font-family: 'Noto Sans', sans-serif; /* Ensure font consistency */
   }
   
   .spotify-credibility img {
