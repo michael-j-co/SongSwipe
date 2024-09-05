@@ -1,15 +1,15 @@
 // SelectTracks.js
-import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom'; // Import useNavigate
+import React, { useState, useEffect, useCallback } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, ListGroup, Container } from 'react-bootstrap';
-import 'react-h5-audio-player/lib/styles.css'; // Import default styles
-import AudioPlayer from 'react-h5-audio-player'; // Import AudioPlayer component
+import 'react-h5-audio-player/lib/styles.css';
+import AudioPlayer from 'react-h5-audio-player';
 import axios from 'axios';
-import './SelectTracks.css'; // Import custom CSS
+import './SelectTracks.css';
 
 const SelectTracks = ({ accessToken }) => {
   const location = useLocation();
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
   const { selectedPlaylists, playlistName, playlistDescription, isPublic } = location.state || { selectedPlaylists: [] };
 
   const [tracks, setTracks] = useState([]);
@@ -20,13 +20,7 @@ const SelectTracks = ({ accessToken }) => {
   const [seenTracks, setSeenTracks] = useState(new Set());
   const [actionHistory, setActionHistory] = useState([]);
 
-  useEffect(() => {
-    if (selectedPlaylists.length > 0) {
-      fetchTracksFromSelectedPlaylists();
-    }
-  }, [selectedPlaylists]);
-
-  const fetchTracksFromSelectedPlaylists = async () => {
+  const fetchTracksFromSelectedPlaylists = useCallback(async () => {
     if (!accessToken) {
       alert('Token is invalid or expired. Please log in again.');
       return;
@@ -43,7 +37,7 @@ const SelectTracks = ({ accessToken }) => {
 
       const allTracks = response.data.items
         .map((item) => item.track)
-        .filter((track) => track && !seenTracks.has(track.id)); 
+        .filter((track) => track && !seenTracks.has(track.id));
 
       setTracks(allTracks);
       setCurrentTrackIndex(0);
@@ -51,13 +45,19 @@ const SelectTracks = ({ accessToken }) => {
       console.error('Error fetching tracks:', error.response.data);
       alert('Error fetching tracks. Please try again.');
     }
-  };
+  }, [accessToken, selectedPlaylists, currentPlaylistIndex, seenTracks]);
+
+  useEffect(() => {
+    if (selectedPlaylists.length > 0) {
+      fetchTracksFromSelectedPlaylists();
+    }
+  }, [selectedPlaylists, fetchTracksFromSelectedPlaylists]);
 
   const handleAcceptTrack = () => {
     const currentTrack = tracks[currentTrackIndex];
     setAcceptedTracks([...acceptedTracks, currentTrack]);
     setSeenTracks((prevSeen) => new Set(prevSeen).add(currentTrack.id));
-    setActionHistory([...actionHistory, { type: 'accept', track: currentTrack, playlistIndex: currentPlaylistIndex, trackIndex: currentTrackIndex }]); // Store action in history
+    setActionHistory([...actionHistory, { type: 'accept', track: currentTrack, playlistIndex: currentPlaylistIndex, trackIndex: currentTrackIndex }]);
     handleNextTrack();
   };
 
@@ -65,7 +65,7 @@ const SelectTracks = ({ accessToken }) => {
     const currentTrack = tracks[currentTrackIndex];
     setRejectedTracks([...rejectedTracks, currentTrack]);
     setSeenTracks((prevSeen) => new Set(prevSeen).add(currentTrack.id));
-    setActionHistory([...actionHistory, { type: 'reject', track: currentTrack, playlistIndex: currentPlaylistIndex, trackIndex: currentTrackIndex }]); // Store action in history
+    setActionHistory([...actionHistory, { type: 'reject', track: currentTrack, playlistIndex: currentPlaylistIndex, trackIndex: currentTrackIndex }]);
     handleNextTrack();
   };
 
@@ -79,25 +79,23 @@ const SelectTracks = ({ accessToken }) => {
 
   const handleSkipToNextPlaylist = async () => {
     if (currentPlaylistIndex + 1 < selectedPlaylists.length) {
-      const nextPlaylistIndex = currentPlaylistIndex + 1; // Determine the next playlist index
-      
-      // Fetch the tracks for the next playlist before updating the index
+      const nextPlaylistIndex = currentPlaylistIndex + 1;
       const tracksFetched = await fetchTracksForPlaylist(nextPlaylistIndex);
       
-      if (tracksFetched) {  // Only update if tracks are fetched successfully
+      if (tracksFetched) {
         setActionHistory([
           ...actionHistory,
           { type: 'skip', playlistIndex: currentPlaylistIndex, trackIndex: currentTrackIndex },
         ]);
-        setCurrentPlaylistIndex(nextPlaylistIndex); // Now update the playlist index
-        setCurrentTrackIndex(0); // Reset the track index to 0 for the new playlist
+        setCurrentPlaylistIndex(nextPlaylistIndex);
+        setCurrentTrackIndex(0);
       }
     } else {
       alert('You have reviewed all selected playlists!');
     }
   };
-  // Fetch tracks for a specific playlist index
-  const fetchTracksForPlaylist = async (playlistIndex) => {
+
+  const fetchTracksForPlaylist = useCallback(async (playlistIndex) => {
     if (!accessToken) {
       alert('Token is invalid or expired. Please log in again.');
       return false;
@@ -116,48 +114,45 @@ const SelectTracks = ({ accessToken }) => {
         .map((item) => item.track)
         .filter((track) => track && !seenTracks.has(track.id));
 
-      setTracks(allTracks); // Update the tracks state
-      return true;  // Indicate successful fetch
+      setTracks(allTracks);
+      return true;
     } catch (error) {
       console.error('Error fetching tracks:', error.response?.data || error);
       alert('Error fetching tracks. Please try again.');
-      return false;  // Indicate failure
+      return false;
     }
-  };
-  
+  }, [accessToken, selectedPlaylists, seenTracks]);
+
   const handleUndo = () => {
     if (actionHistory.length > 0) {
-      const lastAction = actionHistory[actionHistory.length - 1]; // Get the last action
-      const newHistory = actionHistory.slice(0, -1); // Remove the last action from history
+      const lastAction = actionHistory[actionHistory.length - 1];
+      const newHistory = actionHistory.slice(0, -1);
 
       if (lastAction.type === 'accept') {
-        // Undo last accepted track
         setAcceptedTracks(acceptedTracks.filter((track) => track.id !== lastAction.track.id));
         setSeenTracks((prevSeen) => {
           const newSeen = new Set(prevSeen);
           newSeen.delete(lastAction.track.id);
           return newSeen;
         });
-        setCurrentPlaylistIndex(lastAction.playlistIndex); // Go back to the previous playlist
-        setCurrentTrackIndex(lastAction.trackIndex); // Go back to the previous track
+        setCurrentPlaylistIndex(lastAction.playlistIndex);
+        setCurrentTrackIndex(lastAction.trackIndex);
       } else if (lastAction.type === 'reject') {
-        // Undo last rejected track
         setRejectedTracks(rejectedTracks.filter((track) => track.id !== lastAction.track.id));
         setSeenTracks((prevSeen) => {
           const newSeen = new Set(prevSeen);
           newSeen.delete(lastAction.track.id);
           return newSeen;
         });
-        setCurrentPlaylistIndex(lastAction.playlistIndex); // Go back to the previous playlist
-        setCurrentTrackIndex(lastAction.trackIndex); // Go back to the previous track
+        setCurrentPlaylistIndex(lastAction.playlistIndex);
+        setCurrentTrackIndex(lastAction.trackIndex);
       } else if (lastAction.type === 'skip') {
-        // Undo skip to previous playlist
-        setCurrentPlaylistIndex(lastAction.playlistIndex); // Go back to the previous playlist
-        setCurrentTrackIndex(lastAction.trackIndex); // Go back to the previous track
-        fetchTracksFromSelectedPlaylists(); // Reload tracks for the previous playlist
+        setCurrentPlaylistIndex(lastAction.playlistIndex);
+        setCurrentTrackIndex(lastAction.trackIndex);
+        fetchTracksFromSelectedPlaylists();
       }
 
-      setActionHistory(newHistory); // Update action history
+      setActionHistory(newHistory);
     }
   };
 
@@ -168,13 +163,12 @@ const SelectTracks = ({ accessToken }) => {
     }
 
     try {
-      // Create a new playlist using the Spotify API
       const createPlaylistResponse = await axios.post(
         'https://api.spotify.com/v1/me/playlists',
         {
           name: playlistName,
           description: playlistDescription,
-          public: isPublic, // Use the value passed from CreatePlaylist component
+          public: isPublic,
         },
         {
           headers: {
@@ -184,11 +178,10 @@ const SelectTracks = ({ accessToken }) => {
         }
       );
 
-      const newPlaylist = createPlaylistResponse.data; // Get the newly created playlist details
+      const newPlaylist = createPlaylistResponse.data;
       console.log('New playlist created:', newPlaylist);
 
-      // Add the accepted tracks to the newly created playlist
-      const uris = acceptedTracks.map((track) => track.uri); // Get track URIs
+      const uris = acceptedTracks.map((track) => track.uri);
       await axios.post(
         `https://api.spotify.com/v1/playlists/${newPlaylist.id}/tracks`,
         { uris },
@@ -200,7 +193,6 @@ const SelectTracks = ({ accessToken }) => {
         }
       );
 
-      // Navigate to PlaylistCreated component with the new playlist data
       navigate('/playlist-created', { state: { playlist: newPlaylist } });
 
     } catch (error) {
@@ -228,8 +220,13 @@ const SelectTracks = ({ accessToken }) => {
             <p className="track-artist text-light">
               Artist: {tracks[currentTrackIndex].artists.map((artist) => artist.name).join(', ')}
             </p>
-            {/* Custom audio player using react-h5-audio-player */}
-            <div style={{ width: '100%', maxWidth: '400px', margin: '20px auto' }}> {/* Centered and constrained width */}
+            {/* Display track image along with the audio player */}
+            <div className="d-flex align-items-center" style={{ width: '100%', maxWidth: '400px', margin: '20px auto' }}>
+              <img 
+                src={tracks[currentTrackIndex].album.images[0]?.url} 
+                alt="Track" 
+                style={{ width: '80px', height: '80px', borderRadius: '8px', marginRight: '10px' }} 
+              />
               <AudioPlayer
                 src={tracks[currentTrackIndex].preview_url}
                 autoPlay
@@ -242,8 +239,8 @@ const SelectTracks = ({ accessToken }) => {
                   color: '#ffffff', 
                   borderRadius: '8px', 
                   width: '100%', 
-                  boxShadow: '0 0 10px rgba(0, 0, 0, 0.5)'  // Add a subtle shadow for better visibility
-                }} // Custom dark theme with lighter text
+                  boxShadow: '0 0 10px rgba(0, 0, 0, 0.5)'  
+                }}
               />
             </div>
           </div>
@@ -264,7 +261,6 @@ const SelectTracks = ({ accessToken }) => {
         </div>
       )}
 
-      {/* Centered list of accepted tracks */}
       {acceptedTracks.length > 0 && (
         <div className="text-center mt-4">
           <h3 className="text-light">Preview of Accepted Tracks</h3>

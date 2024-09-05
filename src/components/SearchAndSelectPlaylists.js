@@ -48,7 +48,10 @@ const SearchAndSelectPlaylists = () => {
     fetchUserProfile();
   }, [accessToken]);
 
-  const handleSearchPlaylists = async () => {
+  const handleSearchPlaylists = async (event) => {
+    // Prevent the default form submission behavior
+    event.preventDefault();
+
     if (!tags) {
       alert('Please enter some tags to search for suggestions.');
       return;
@@ -120,7 +123,10 @@ const SearchAndSelectPlaylists = () => {
     }
   };
 
-  const handleFetchTracksClick = () => {
+  const handleFetchTracksClick = (event) => {
+    // Prevent the default form submission behavior
+    event.preventDefault();
+
     if (selectedPlaylists.length === 0) {
       alert('Please select at least one playlist.');
       return;
@@ -165,12 +171,13 @@ const SearchAndSelectPlaylists = () => {
       {/* Search Form Section */}
       <div className="w-100" style={{ maxWidth: '600px' }}>
         <h2 className="text-light mb-4 text-center">Search and Select Playlists</h2>
-        <Form className="mb-4">
+        {/* Wrap the form in a form tag with onSubmit handler */}
+        <Form className="mb-4" onSubmit={handleSearchPlaylists}>
           <Form.Group className="mb-3">
             <Form.Label className="text-light">Tags (comma-separated)</Form.Label>
             <Form.Control type="text" value={tags} onChange={(e) => setTags(e.target.value)} placeholder="e.g., gym, chill, driving" />
           </Form.Group>
-          <Button variant="success" onClick={handleSearchPlaylists} disabled={loading}>
+          <Button variant="success" type="submit" disabled={loading}>
             {loading ? 'Searching...' : 'Search for Playlists'}
           </Button>
         </Form>
@@ -223,10 +230,13 @@ const SearchAndSelectPlaylists = () => {
                 </Col>
               ))}
             </Row>
-            {/* Button to navigate to SelectTracks component */}
-            <Button variant="success" className="mt-4" onClick={handleFetchTracksClick}>
-              Fetch Tracks from Selected Playlists
-            </Button>
+
+            {/* Centered "Fetch Tracks" button */}
+            <div className="d-flex justify-content-center">
+              <Button variant="success" className="mt-4" onClick={handleFetchTracksClick}>
+                Fetch Tracks from Selected Playlists
+              </Button>
+            </div>
           </>
         )}
       </div>

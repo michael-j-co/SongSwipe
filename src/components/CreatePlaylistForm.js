@@ -10,7 +10,10 @@ const CreatePlaylistForm = ({ accessToken }) => {
 
   const navigate = useNavigate();
 
-  const handleNext = () => {
+  const handleNext = (event) => {
+    // Prevent the default form submission behavior
+    event.preventDefault();
+
     if (!playlistName) {
       alert('Please enter a playlist name.');
       return;
@@ -23,19 +26,33 @@ const CreatePlaylistForm = ({ accessToken }) => {
   return (
     <Container className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
       <h2 className="text-light mb-4">Create a New Playlist</h2>
-      <Form className="mb-4">
+      {/* Wrap the form elements in a form tag with onSubmit handler */}
+      <Form className="mb-4" onSubmit={handleNext}>
         <Form.Group className="mb-3">
           <Form.Label className="text-light">Playlist Name</Form.Label>
-          <Form.Control type="text" value={playlistName} onChange={(e) => setPlaylistName(e.target.value)} />
+          <Form.Control
+            type="text"
+            value={playlistName}
+            onChange={(e) => setPlaylistName(e.target.value)}
+          />
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label className="text-light">Playlist Description</Form.Label>
-          <Form.Control type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
+          <Form.Control
+            type="text"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Check type="checkbox" label="Public" checked={isPublic} onChange={(e) => setIsPublic(e.target.checked)} />
+          <Form.Check
+            type="checkbox"
+            label="Public"
+            checked={isPublic}
+            onChange={(e) => setIsPublic(e.target.checked)}
+          />
         </Form.Group>
-        <Button variant="success" onClick={handleNext}>
+        <Button variant="success" type="submit">
           Next
         </Button>
       </Form>
