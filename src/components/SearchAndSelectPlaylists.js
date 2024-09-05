@@ -13,7 +13,7 @@ const reAuthenticateUser = () => {
 const SearchAndSelectPlaylists = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { playlistName, description, isPublic, accessToken } = location.state || {};
+  const { playlistName, description, isPublic, accessToken, editingPlaylistId } = location.state || {};
 
   const [tags, setTags] = useState('');
   const [playlists, setPlaylists] = useState([]);
@@ -126,14 +126,22 @@ const SearchAndSelectPlaylists = () => {
   const handleFetchTracksClick = (event) => {
     // Prevent the default form submission behavior
     event.preventDefault();
-
+  
     if (selectedPlaylists.length === 0) {
       alert('Please select at least one playlist.');
       return;
     }
-
+  
     // Navigate to the SelectTracks component with the selected playlists and playlist information
-    navigate('/select-tracks', { state: { selectedPlaylists, playlistName, playlistDescription: description, isPublic } });
+    navigate('/select-tracks', { 
+      state: { 
+        selectedPlaylists, 
+        playlistName, 
+        playlistDescription: description, 
+        isPublic,
+        editingPlaylistId // Include editingPlaylistId when navigating
+      } 
+    });
   };
 
   // Function to sort playlists based on the selected option
@@ -230,13 +238,10 @@ const SearchAndSelectPlaylists = () => {
                 </Col>
               ))}
             </Row>
-
-            {/* Centered "Fetch Tracks" button */}
-            <div className="d-flex justify-content-center">
-              <Button variant="success" className="mt-4" onClick={handleFetchTracksClick}>
-                Fetch Tracks from Selected Playlists
-              </Button>
-            </div>
+            {/* Button to navigate to SelectTracks component */}
+            <Button variant="success" className="mt-4" onClick={handleFetchTracksClick}>
+              Fetch Tracks from Selected Playlists
+            </Button>
           </>
         )}
       </div>

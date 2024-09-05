@@ -1,10 +1,11 @@
-// src/components/EditPlaylist.js
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';  // Import useNavigate from react-router-dom
 import axios from 'axios';
 
 const EditPlaylist = ({ accessToken }) => {
   const [playlists, setPlaylists] = useState([]);
+  const navigate = useNavigate(); // Initialize the navigate function
 
   useEffect(() => {
     axios
@@ -18,8 +19,13 @@ const EditPlaylist = ({ accessToken }) => {
   }, [accessToken]);
 
   const handleEditPlaylist = (playlistId) => {
-    // Add logic to edit a selected playlist
-    alert(`Edit playlist with ID: ${playlistId}`);
+    // Navigate to the SearchAndSelectPlaylists component with the selected playlist ID
+    navigate('/search-playlists', {
+      state: {
+        accessToken,
+        editingPlaylistId: playlistId,  // Pass the selected playlist ID to edit
+      },
+    });
   };
 
   return (

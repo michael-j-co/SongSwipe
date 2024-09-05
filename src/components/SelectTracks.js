@@ -6,11 +6,14 @@ import 'react-h5-audio-player/lib/styles.css';
 import AudioPlayer from 'react-h5-audio-player';
 import axios from 'axios';
 import './SelectTracks.css';
+import CreatePlaylist from './CreatePlaylist';  // Import the CreatePlaylist component
+import UpdatePlaylist from './UpdatePlaylist';  // Import the EditPlaylist component
+
 
 const SelectTracks = ({ accessToken }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { selectedPlaylists, playlistName, playlistDescription, isPublic } = location.state || { selectedPlaylists: [] };
+  const { selectedPlaylists, playlistName, playlistDescription, isPublic, editingPlaylistId } = location.state || { selectedPlaylists: [] };
 
   const [tracks, setTracks] = useState([]);
   const [currentPlaylistIndex, setCurrentPlaylistIndex] = useState(0);
@@ -156,50 +159,6 @@ const SelectTracks = ({ accessToken }) => {
     }
   };
 
-  const handleFinishAndCreatePlaylist = async () => {
-    if (acceptedTracks.length === 0) {
-      alert('No tracks to add to the playlist. Please accept some tracks first.');
-      return;
-    }
-
-    try {
-      const createPlaylistResponse = await axios.post(
-        'https://api.spotify.com/v1/me/playlists',
-        {
-          name: playlistName,
-          description: playlistDescription,
-          public: isPublic,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-
-      const newPlaylist = createPlaylistResponse.data;
-      console.log('New playlist created:', newPlaylist);
-
-      const uris = acceptedTracks.map((track) => track.uri);
-      await axios.post(
-        `https://api.spotify.com/v1/playlists/${newPlaylist.id}/tracks`,
-        { uris },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-
-      navigate('/playlist-created', { state: { playlist: newPlaylist } });
-
-    } catch (error) {
-      console.error('Error creating playlist or adding tracks:', error.response?.data || error);
-      alert('Error creating playlist. Please try again.');
-    }
-  };
 
   return (
     <Container className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
@@ -271,9 +230,21 @@ const SelectTracks = ({ accessToken }) => {
               </ListGroup.Item>
             ))}
           </ListGroup>
-          <Button variant="success" className="mt-4" onClick={handleFinishAndCreatePlaylist}>
-            Finish and Create Playlist
-          </Button>
+          {!editingPlaylistId ? (
+            <CreatePlaylist 
+              accessToken={accessToken} 
+              playlistName={playlistName} 
+              playlistDescription={playlistDescription} 
+              isPublic={isPublic} 
+              acceptedTracks={acceptedTracks} 
+            />
+          ) : (
+            <UpdatePlaylist 
+              accessToken={accessToken} 
+              editingPlaylistId={editingPlaylistId} 
+              acceptedTracks={acceptedTracks} 
+            />
+          )}
         </div>
       )}
     </Container>
