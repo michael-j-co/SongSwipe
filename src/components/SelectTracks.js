@@ -1,4 +1,3 @@
-// SelectTracks.js
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, ListGroup, Container } from 'react-bootstrap';
@@ -8,7 +7,6 @@ import axios from 'axios';
 import './SelectTracks.css';
 import CreatePlaylist from './CreatePlaylist';  // Import the CreatePlaylist component
 import UpdatePlaylist from './UpdatePlaylist';  // Import the EditPlaylist component
-
 
 const SelectTracks = ({ accessToken }) => {
   const location = useLocation();
@@ -22,7 +20,29 @@ const SelectTracks = ({ accessToken }) => {
   const [rejectedTracks, setRejectedTracks] = useState([]);
   const [seenTracks, setSeenTracks] = useState(new Set());
   const [actionHistory, setActionHistory] = useState([]);
+  const [existingTracks, setExistingTracks] = useState(new Set()); // Tracks already in the playlist being edited
 
+  // Fetch tracks from the playlist being edited to exclude them from available tracks for selection
+  const fetchExistingPlaylistTracks = useCallback(async () => {
+    if (!editingPlaylistId || !accessToken) return;
+
+    try {
+      const response = await axios.get(`https://api.spotify.com/v1/playlists/${editingPlaylistId}/tracks`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      // Extract track IDs to use for filtering
+      const trackIds = new Set(response.data.items.map(item => item.track.id));
+      setExistingTracks(trackIds);
+    } catch (error) {
+      console.error('Error fetching existing playlist tracks:', error.response?.data || error);
+      alert('Error fetching existing playlist tracks. Please try again.');
+    }
+  }, [editingPlaylistId, accessToken]);
+
+  // Fetch tracks from selected playlists
   const fetchTracksFromSelectedPlaylists = useCallback(async () => {
     if (!accessToken) {
       alert('Token is invalid or expired. Please log in again.');
@@ -38,17 +58,25 @@ const SelectTracks = ({ accessToken }) => {
         },
       });
 
+      // Filter tracks not already seen and, if editing, not already in the playlist being edited
       const allTracks = response.data.items
         .map((item) => item.track)
-        .filter((track) => track && !seenTracks.has(track.id));
+        .filter((track) => track && !seenTracks.has(track.id) && (!editingPlaylistId || !existingTracks.has(track.id)));
 
       setTracks(allTracks);
       setCurrentTrackIndex(0);
     } catch (error) {
-      console.error('Error fetching tracks:', error.response.data);
+      console.error('Error fetching tracks:', error.response?.data || error);
       alert('Error fetching tracks. Please try again.');
     }
-  }, [accessToken, selectedPlaylists, currentPlaylistIndex, seenTracks]);
+  }, [accessToken, selectedPlaylists, currentPlaylistIndex, seenTracks, editingPlaylistId, existingTracks]);
+
+  useEffect(() => {
+    if (editingPlaylistId) {
+      // If editing a playlist, fetch its existing tracks first
+      fetchExistingPlaylistTracks();
+    }
+  }, [editingPlaylistId, fetchExistingPlaylistTracks]);
 
   useEffect(() => {
     if (selectedPlaylists.length > 0) {
@@ -115,7 +143,7 @@ const SelectTracks = ({ accessToken }) => {
 
       const allTracks = response.data.items
         .map((item) => item.track)
-        .filter((track) => track && !seenTracks.has(track.id));
+        .filter((track) => track && !seenTracks.has(track.id) && (!editingPlaylistId || !existingTracks.has(track.id)));
 
       setTracks(allTracks);
       return true;
@@ -124,7 +152,7 @@ const SelectTracks = ({ accessToken }) => {
       alert('Error fetching tracks. Please try again.');
       return false;
     }
-  }, [accessToken, selectedPlaylists, seenTracks]);
+  }, [accessToken, selectedPlaylists, seenTracks, editingPlaylistId, existingTracks]);
 
   const handleUndo = () => {
     if (actionHistory.length > 0) {
@@ -158,7 +186,6 @@ const SelectTracks = ({ accessToken }) => {
       setActionHistory(newHistory);
     }
   };
-
 
   return (
     <Container className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
