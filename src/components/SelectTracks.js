@@ -5,7 +5,7 @@ import 'react-h5-audio-player/lib/styles.css';
 import AudioPlayer from 'react-h5-audio-player';
 import axios from 'axios';
 import './SelectTracks.css';
-import CreatePlaylist from './CreatePlaylist';  // Import the CreatePlaylist component
+import FinishNewPlaylist from './FinishNewPlaylist';  // Import the CreatePlaylist component
 import UpdatePlaylist from './UpdatePlaylist';  // Import the EditPlaylist component
 
 const SelectTracks = ({ accessToken }) => {
@@ -258,7 +258,7 @@ const SelectTracks = ({ accessToken }) => {
             ))}
           </ListGroup>
           {!editingPlaylistId ? (
-            <CreatePlaylist 
+            <FinishNewPlaylist 
               accessToken={accessToken} 
               playlistName={playlistName} 
               playlistDescription={playlistDescription} 
