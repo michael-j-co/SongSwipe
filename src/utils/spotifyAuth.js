@@ -1,13 +1,15 @@
 // src/utils/spotifyAuth.js
+
 const clientId = '0291931c55c94124adde3ce9066a5162';
-const redirectUri = 'http://localhost:3000/callback'; // Replace with your redirect URI
+const redirectUri = process.env.REACT_APP_SPOTIFY_REDIRECT_URI;
+
 const scopes = [
   'playlist-read-private',
   'playlist-read-collaborative',
   'playlist-modify-public',
   'playlist-modify-private',
   'user-read-private',
-  'user-read-email'
+  'user-read-email',
 ];
 
 export const getSpotifyAuthUrl = () => {
