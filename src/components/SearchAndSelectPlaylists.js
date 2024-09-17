@@ -1,8 +1,9 @@
-// src/components/SearchAndSelectPlaylists.js
 import React, { useState, useEffect } from 'react';
-import { Container, Form, Button, Row, Col, Card } from 'react-bootstrap';
+import { Container, Form, Button, Row, Col, Card, Spinner, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useTheme } from '../context/ThemeContext';
+import { FaCheck, FaTimes } from 'react-icons/fa'; // Import icons for select/deselect actions
 
 const reAuthenticateUser = () => {
   window.localStorage.removeItem('token');
@@ -13,6 +14,7 @@ const reAuthenticateUser = () => {
 const SearchAndSelectPlaylists = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { theme } = useTheme(); // Access the current theme
   const { playlistName, description, isPublic, accessToken, editingPlaylistId } = location.state || {};
 
   const [tags, setTags] = useState('');
@@ -20,7 +22,7 @@ const SearchAndSelectPlaylists = () => {
   const [selectedPlaylists, setSelectedPlaylists] = useState([]);
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState('');
-  const [sortOption, setSortOption] = useState('Recommended'); // State for sorting option
+  const [sortOption, setSortOption] = useState('Recommended');
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -49,7 +51,6 @@ const SearchAndSelectPlaylists = () => {
   }, [accessToken]);
 
   const handleSearchPlaylists = async (event) => {
-    // Prevent the default form submission behavior
     event.preventDefault();
 
     if (!tags) {
@@ -63,10 +64,9 @@ const SearchAndSelectPlaylists = () => {
       return;
     }
 
-    console.log('Searching playlists with token:', accessToken);
     setLoading(true);
 
-    const tagArray = tags.split(',').map(tag => tag.trim());
+    const tagArray = tags.split(',').map((tag) => tag.trim());
     const allPlaylists = [];
 
     try {
@@ -93,7 +93,6 @@ const SearchAndSelectPlaylists = () => {
         });
       }
 
-      // Fetch detailed information for each playlist to get accurate follower count
       const playlistsWithDetails = await Promise.all(
         allPlaylists.map(async (playlist) => {
           const detailedResponse = await axios.get(
@@ -106,7 +105,7 @@ const SearchAndSelectPlaylists = () => {
           );
           return {
             ...playlist,
-            followers: detailedResponse.data.followers.total, // Update followers count
+            followers: detailedResponse.data.followers.total,
           };
         })
       );
@@ -124,29 +123,26 @@ const SearchAndSelectPlaylists = () => {
   };
 
   const handleFetchTracksClick = (event) => {
-    // Prevent the default form submission behavior
     event.preventDefault();
-  
+
     if (selectedPlaylists.length === 0) {
       alert('Please select at least one playlist.');
       return;
     }
-  
-    // Navigate to the SelectTracks component with the selected playlists and playlist information
-    navigate('/select-tracks', { 
-      state: { 
-        selectedPlaylists, 
-        playlistName, 
-        playlistDescription: description, 
+
+    navigate('/select-tracks', {
+      state: {
+        selectedPlaylists,
+        playlistName,
+        playlistDescription: description,
         isPublic,
-        editingPlaylistId // Include editingPlaylistId when navigating
-      } 
+        editingPlaylistId,
+      },
     });
   };
 
-  // Function to sort playlists based on the selected option
   const sortPlaylists = (option) => {
-    let sortedPlaylists = [...playlists]; // Clone the playlists array
+    let sortedPlaylists = [...playlists];
 
     switch (option) {
       case 'A-Z':
@@ -156,18 +152,16 @@ const SearchAndSelectPlaylists = () => {
         sortedPlaylists.sort((a, b) => a.owner.display_name.localeCompare(b.owner.display_name));
         break;
       case 'Likes':
-        sortedPlaylists.sort((a, b) => b.followers - a.followers); // Sort by number of followers descending
+        sortedPlaylists.sort((a, b) => b.followers - a.followers);
         break;
       case 'Recommended':
       default:
-        // Default case, no sorting or custom logic for "Recommended"
         break;
     }
 
     setPlaylists(sortedPlaylists);
   };
 
-  // Handle sorting option change
   const handleSortChange = (event) => {
     const selectedOption = event.target.value;
     setSortOption(selectedOption);
@@ -175,54 +169,101 @@ const SearchAndSelectPlaylists = () => {
   };
 
   return (
-    <Container className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
-      {/* Search Form Section */}
+    <Container
+      className="d-flex flex-column justify-content-center align-items-center"
+      style={{
+        minHeight: '100vh',
+        backgroundColor: theme.background,
+        color: theme.textPrimary,
+        padding: '20px',
+      }}
+    >
       <div className="w-100" style={{ maxWidth: '600px' }}>
-        <h2 className="text-light mb-4 text-center">Search and Select Playlists</h2>
-        {/* Wrap the form in a form tag with onSubmit handler */}
+        <h2 className="mb-4 text-center" style={{ color: theme.textPrimary }}>
+          Search and Select Playlists
+        </h2>
         <Form className="mb-4" onSubmit={handleSearchPlaylists}>
           <Form.Group className="mb-3">
-            <Form.Label className="text-light">Tags (comma-separated)</Form.Label>
-            <Form.Control type="text" value={tags} onChange={(e) => setTags(e.target.value)} placeholder="e.g., gym, chill, driving" />
+            <Form.Label style={{ color: theme.textPrimary }}>Tags (comma-separated)</Form.Label>
+            <Form.Control
+              type="text"
+              value={tags}
+              onChange={(e) => setTags(e.target.value)}
+              placeholder="e.g., gym, chill, driving"
+              style={{
+                backgroundColor: theme.inputBackground,
+                color: theme.textPrimary,
+                borderColor: theme.inputBorder,
+              }}
+            />
           </Form.Group>
-          <Button variant="success" type="submit" disabled={loading}>
-            {loading ? 'Searching...' : 'Search for Playlists'}
+          <Button
+            type="submit"
+            disabled={loading}
+            style={{
+              backgroundColor: theme.buttonBackground,
+              color: theme.buttonText,
+              border: 'none',
+            }}
+          >
+            {loading ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : 'Search for Playlists'}
           </Button>
         </Form>
       </div>
 
-      {/* Playlists Section */}
       <div className="w-100 mt-4">
         {playlists.length > 0 && (
           <>
-            {/* Sorting Dropdown */}
-            <Form.Group className="mb-4" style={{ maxWidth: '200px' }}> {/* Adjusted width */}
-              <Form.Label className="text-light">Sort By:</Form.Label>
-              <Form.Select value={sortOption} onChange={handleSortChange}>
+            <Form.Group className="mb-4" style={{ maxWidth: '200px' }}>
+              <Form.Label style={{ color: theme.textPrimary }}>Sort By:</Form.Label>
+              <Form.Select
+                value={sortOption}
+                onChange={handleSortChange}
+                style={{
+                  backgroundColor: theme.inputBackground,
+                  color: theme.textPrimary,
+                  borderColor: theme.inputBorder,
+                }}
+              >
                 <option value="Recommended">Recommended</option>
                 <option value="A-Z">A-Z</option>
                 <option value="Author">Author</option>
-                <option value="Likes">Likes</option> {/* New sorting option */}
+                <option value="Likes">Likes</option>
               </Form.Select>
             </Form.Group>
 
-            <h3 className="text-light mb-4 text-center">Select Playlists That Seem Appealing</h3>
+            <h3 className="mb-4 text-center" style={{ color: theme.textPrimary }}>
+              Select Playlists That Seem Appealing
+            </h3>
             <Row>
               {playlists.map((playlist) => (
                 <Col key={playlist.id} md={4} className="mb-4">
-                  <Card className="bg-dark text-light shadow-sm h-100"> {/* Ensuring consistent height */}
+                  <Card
+                    className="shadow-sm h-100"
+                    style={{
+                      backgroundColor: theme.cardBackground,
+                      color: theme.textPrimary,
+                      transition: 'transform 0.3s ease',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.02)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+                  >
                     <Card.Img variant="top" src={playlist.images[0]?.url} />
-                    <Card.Body className="d-flex flex-column justify-content-between"> {/* Align content and button at the bottom */}
+                    <Card.Body className="d-flex flex-column justify-content-between">
                       <div>
                         <Card.Title>{playlist.name}</Card.Title>
-                        <Card.Text>
-                          Author: {playlist.owner.display_name}
-                          <br />
-                          Likes: {playlist.followers || 0} {/* Correctly display likes */}
-                        </Card.Text>
+                        <OverlayTrigger
+                          overlay={<Tooltip>{playlist.owner.display_name}</Tooltip>}
+                        >
+                          <Card.Text>Author: {playlist.owner.display_name}</Card.Text>
+                        </OverlayTrigger>
+                        <OverlayTrigger
+                          overlay={<Tooltip>Likes: {playlist.followers || 0}</Tooltip>}
+                        >
+                          <Card.Text>Likes: {playlist.followers || 0}</Card.Text>
+                        </OverlayTrigger>
                       </div>
                       <Button
-                        variant={selectedPlaylists.includes(playlist) ? "danger" : "success"}
                         onClick={() =>
                           setSelectedPlaylists((prevSelected) =>
                             prevSelected.includes(playlist)
@@ -230,18 +271,35 @@ const SearchAndSelectPlaylists = () => {
                               : [...prevSelected, playlist]
                           )
                         }
+                        style={{
+                          backgroundColor: selectedPlaylists.includes(playlist)
+                            ? theme.dangerButtonBackground
+                            : theme.successButtonBackground,
+                          color: theme.buttonText,
+                          border: 'none',
+                        }}
                       >
-                        {selectedPlaylists.includes(playlist) ? "Deselect" : "Select"}
+                        {selectedPlaylists.includes(playlist) ? <FaTimes /> : <FaCheck />} {/* Icons for better feedback */}
+                        {selectedPlaylists.includes(playlist) ? 'Deselect' : 'Select'}
                       </Button>
                     </Card.Body>
                   </Card>
                 </Col>
               ))}
             </Row>
-            {/* Button to navigate to SelectTracks component */}
-            <Button variant="success" className="mt-4" onClick={handleFetchTracksClick}>
-              Fetch Tracks from Selected Playlists
-            </Button>
+            {/* Centered button container */}
+            <div className="d-flex justify-content-center mt-4">
+              <Button
+                onClick={handleFetchTracksClick}
+                style={{
+                  backgroundColor: theme.buttonBackground,
+                  color: theme.buttonText,
+                  border: 'none',
+                }}
+              >
+                Fetch Tracks from Selected Playlists
+              </Button>
+            </div>
           </>
         )}
       </div>

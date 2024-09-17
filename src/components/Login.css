@@ -1,51 +1,93 @@
-/* src/components/Login.css */
-body {
-    background-color: #222; /* Dark background for the app */
-    font-family: 'Noto Sans', sans-serif; /* Apply Noto Sans font */
+/* Login.css */
+
+/* Background styling */
+.login-container {
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #1db954, #191414); /* Spotify-themed gradient */
+  padding: 2rem;
+}
+
+/* Welcome Section Styling */
+.welcome-section {
+  margin-bottom: 2rem;
+}
+
+.ss-logo { /* Updated class for SongSwipe logo */
+  width: 150px;
+  margin-bottom: 20px;
+}
+
+.welcome-title {
+  color: #fff;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.welcome-subtitle {
+  color: #b3b3b3;
+  font-size: 1.25rem;
+}
+
+/* Steps Section Styling */
+.steps-title {
+  color: #fff;
+  font-weight: 600;
+}
+
+.step-card {
+  background-color: #222326;
+  color: #b3b3b3;
+  border: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.step-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Login Button Styling */
+.login-button {
+  background-color: #1db954;
+  border: none;
+  padding: 0.75rem 2rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #1aa34a;
+  transform: translateY(-3px);
+}
+
+/* Spotify Section Styling */
+.spotify-credibility {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.spotify-text {
+  color: #b3b3b3;
+  margin-bottom: 0.5rem;
+}
+
+.spotify-logo {
+  width: 100px;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .welcome-title {
+    font-size: 2rem;
   }
   
-  .welcome-section {
-    text-align: center;
-  }
-  
-  .steps-section {
-    text-align: center;
+  .login-button {
     width: 100%;
-    max-width: 800px;
-    margin: 0 auto; /* Center the steps section */
+    font-size: 1.1rem;
   }
   
-  .steps-section h5 {
-    color: #00d95f; /* Spotify green for step headers */
-    margin-bottom: 0.5rem;
-    font-family: 'Noto Sans', sans-serif; /* Ensure font consistency */
+  .step-card {
+    margin-bottom: 1rem;
   }
-  
-  .steps-section p {
-    font-size: 1rem;
-    color: #ddd; /* Light gray text for descriptions */
-    font-family: 'Noto Sans', sans-serif; /* Ensure font consistency */
-  }
-  
-  .spotify-credibility {
-    text-align: center;
-    color: white; /* White text for better readability */
-    font-family: 'Noto Sans', sans-serif; /* Ensure font consistency */
-  }
-  
-  .text-muted {
-    color: #ffffff; /* White text for better readability */
-    font-family: 'Noto Sans', sans-serif; /* Ensure font consistency */
-  }
-  
-  .welcome-section p {
-    font-size: 1.2rem;
-    color: #ffffff; /* White text for better readability */
-    margin-bottom: 2rem;
-    font-family: 'Noto Sans', sans-serif; /* Ensure font consistency */
-  }
-  
-  .spotify-credibility img {
-    margin-top: 10px;
-  }
-  
+}

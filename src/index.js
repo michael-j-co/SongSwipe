@@ -6,11 +6,14 @@ import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import './App.css';
+import { CustomThemeProvider } from './context/ThemeContext'; // Import the custom theme provider
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <CustomThemeProvider>
+      <App />
+    </CustomThemeProvider>
   </React.StrictMode>
 );
 

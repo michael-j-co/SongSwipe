@@ -29,6 +29,10 @@ body {
 .card-img-top {
   border-bottom: 1px solid #333; /* Border between image and card body */
 }
+.option-card:hover {
+  transform: scale(1.05); /* Scale up on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}
 
 /* Button styles */
 .btn-success {
