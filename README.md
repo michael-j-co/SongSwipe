@@ -15,19 +15,21 @@ PlaylistBuddy is a web application that allows users to create and edit Spotify 
 ## Features
 
 - **User Authentication**: Log in with your Spotify account to access your playlists.
-- **Create Playlists**: Enter playlist details such as title, tags, and description.
-- **Select Playlists and Tracks**: Search and select playlists and tracks to add to your new playlist.
-- **Undo/Redo**: Easily undo or redo your last action to refine your selections.
-- **Edit Existing Playlists**: Modify your existing Spotify playlists with a few clicks.
+- **Create Playlists**: Enter playlist details such as title and description to create a playlist on your spotify in real time.
+- **Edit Playlists**: Select an existing playlist from your Spotify profile to be edited.
+- **Playlist Searching**:  Search for playlists created by spotify and other users to pull from when creating your own playlist.
+- **Track Suggestion**: Swipe through suggested tracks from the playlists selected.
+- **Share Playlists**: Share the link to your newly edited or created playlist with others.
 - **Dark Mode**: Clean and modern dark-themed user interface.
 
 ## Demo
 
-A live demo of the app is available [here](#). (Replace with your actual link if hosted)
+A live demo of the app is available [here](#). 
+This app is currently in development mode and is availble for up to 25 users. Spots are available - Contact me if you would like to test the app for yourself!
 
 ## Installation
 
-To run PlaylistBuddy locally, follow these steps:
+To run SongSwipe locally, follow these steps:
 
 1. **Clone the repository**:
 

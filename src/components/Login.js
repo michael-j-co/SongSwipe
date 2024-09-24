@@ -8,15 +8,18 @@ import spotifyDarkLogo from '../assets/spotifylight.png';
 // Responsive Layout
 const LoginContainer = styled.div`
   display: flex;
-  flex-direction: column; /* Start with a single-column layout for mobile */
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 2rem;
   height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
   background-color: ${({ theme }) => theme.background};
   text-align: left;
+  transition: background-color 0.3s ease;
 
-  @media (min-width: 768px) { /* Two-column layout for larger screens */
+  @media (min-width: 768px) {
     flex-direction: row;
   }
 `;
@@ -40,7 +43,7 @@ const LeftSection = styled.div`
   justify-content: center;
   align-items: center;
   padding: 1rem;
-  animation: ${slideUp} 0.5s ease-out; /* Slide-up animation */
+  animation: ${slideUp} 0.5s ease-out;
 
   @media (min-width: 768px) {
     text-align: center;
@@ -65,34 +68,48 @@ const RightSection = styled.div`
 const Text = styled.p`
   color: ${({ theme }) => theme.textPrimary};
   margin-bottom: 1rem;
+  transition: color 0.3s ease;
 `;
 
 const WelcomeTitle = styled.h1`
   color: ${({ theme }) => theme.textPrimary};
   margin-bottom: 1rem;
+  transition: color 0.3s ease;
 `;
 
-const LoginButton = styled.button`
+const LoginButton = styled.button.attrs(() => ({
+  'aria-label': 'Login with Spotify',
+}))`
   background-color: ${({ theme }) => theme.buttonBackground};
   color: ${({ theme }) => theme.buttonText};
-  padding: 10px 20px;
+  padding: 12px 24px;
   font-size: 1.25rem;
   font-weight: 600;
   border-radius: 5px;
   margin: 20px 0;
   border: none;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
 
   &:hover {
     transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   }
 
   &:active {
     transform: scale(0.95);
+  }
+
+  &:focus {
+    outline: 2px solid ${({ theme }) => theme.buttonText};
+  }
+
+  &:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
   }
 `;
 
@@ -101,27 +118,48 @@ const SpotifyCredibility = styled.div`
   text-align: center;
 `;
 
-const SpotifyLogo = styled.img`
-  width: 100px;
+const SpotifyLogo = styled.img.attrs(() => ({
+  alt: 'Spotify logo',
+}))`
+  width: 80px;
+  transition: width 0.3s ease;
+
+  @media (min-width: 768px) {
+    width: 100px;
+  }
 `;
 
 const StepCard = styled.div`
   background-color: ${({ theme }) => theme.secondary};
   color: ${({ theme }) => theme.buttonText};
-  padding: 1rem;
+  padding: 1.5rem;
   margin: 1rem 0;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 
   &:hover {
     transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
   }
+`;
+
+const StepNumber = styled.span`
+  background-color: ${({ theme }) => theme.buttonBackground};
+  color: ${({ theme }) => theme.buttonText};
+  padding: 0.5rem 1rem;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 1.25rem;
+  display: inline-block;
 `;
 
 const Login = () => {
   const { theme } = useTheme();
-  const spotifyLogo = spotifyDarkLogo;
+  const spotifyLogo = theme.name ==='dark'? spotifyLightLogo : spotifyDarkLogo; // Assuming dark logo is used
 
   return (
     <LoginContainer>
@@ -136,7 +174,7 @@ const Login = () => {
         </LoginButton>
         <SpotifyCredibility>
           <Text>Made for Spotify</Text>
-          <SpotifyLogo src={spotifyLogo} alt="Spotify Logo" />
+          <SpotifyLogo src={spotifyLogo} />
         </SpotifyCredibility>
       </LeftSection>
       <RightSection>
@@ -149,8 +187,11 @@ const Login = () => {
           { step: 'Step 5', description: 'Enjoy and share your playlist' }
         ].map((item, index) => (
           <StepCard key={index}>
-            <h5>{item.step}</h5>
-            <p>{item.description}</p>
+            <StepNumber>{index + 1}</StepNumber>
+            <div>
+              <h5>{item.step}</h5>
+              <p>{item.description}</p>
+            </div>
           </StepCard>
         ))}
       </RightSection>
