@@ -32,12 +32,10 @@ const App = () => {
   }, []);
 
   return (
-    <CustomThemeProvider> {/* Wrap the whole app in the custom theme provider */}
+    <CustomThemeProvider> 
       <Router>
         <AppContainer>
-          <Header /> {/* Header now has the toggle functionality */}
-          
-          {/* Application Routes */}
+          <Header /> 
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/callback" element={<Callback setAccessToken={setAccessToken} />} />

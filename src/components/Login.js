@@ -12,7 +12,7 @@ const LoginContainer = styled.div`
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  height: 100vh;
+  padding-top: 100px;
   max-width: 1200px;
   margin: 0 auto;
   background-color: ${({ theme }) => theme.background};
@@ -93,6 +93,7 @@ const LoginButton = styled.button.attrs(() => ({
   display: flex;
   align-items: center;
   justify-content: center;
+  will-change: transform; /* Optimizing animation performance */
 
   &:hover {
     transform: scale(1.05);
@@ -157,9 +158,21 @@ const StepNumber = styled.span`
   display: inline-block;
 `;
 
+// Extracted Step component for reusability
+const Step = ({ number, step, description }) => (
+  <StepCard>
+    <StepNumber>{number}</StepNumber>
+    <div>
+      <h5>{step}</h5>
+      <p>{description}</p>
+    </div>
+  </StepCard>
+);
+
 const Login = () => {
   const { theme } = useTheme();
-  const spotifyLogo = theme.name ==='dark'? spotifyLightLogo : spotifyDarkLogo; // Assuming dark logo is used
+  const { name, background, textPrimary } = theme; // Destructured for readability
+  const spotifyLogo = name === 'dark' ? spotifyLightLogo : spotifyDarkLogo;
 
   return (
     <LoginContainer>
@@ -184,15 +197,9 @@ const Login = () => {
           { step: 'Step 2', description: 'Create a new playlist or edit an existing one' },
           { step: 'Step 3', description: 'Swipe to choose songs' },
           { step: 'Step 4', description: 'Organize and save your playlist' },
-          { step: 'Step 5', description: 'Enjoy and share your playlist' }
+          { step: 'Step 5', description: 'Enjoy and share your playlist' },
         ].map((item, index) => (
-          <StepCard key={index}>
-            <StepNumber>{index + 1}</StepNumber>
-            <div>
-              <h5>{item.step}</h5>
-              <p>{item.description}</p>
-            </div>
-          </StepCard>
+          <Step key={index} number={index + 1} step={item.step} description={item.description} />
         ))}
       </RightSection>
     </LoginContainer>

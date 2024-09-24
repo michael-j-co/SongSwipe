@@ -5,6 +5,8 @@
   min-height: 100vh;
   background: linear-gradient(to bottom right, #1db954, #191414); /* Spotify-themed gradient */
   padding: 2rem;
+  padding-top: 100px; /* This should match the height of the fixed navbar */
+
 }
 
 /* Welcome Section Styling */
