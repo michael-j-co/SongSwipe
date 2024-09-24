@@ -5,12 +5,12 @@ import { ThemeProvider } from 'styled-components';
 // Define light and dark theme objects
 const lightTheme = {
   name: 'light',
-  primary: '#d6dcdc',
-  secondary: '#051018',
-  textPrimary: '#051018',
-  textSecondary: '#d6dcdc',
-  buttonBackground: '#051018',
-  buttonText: '#d6dcdc',
+  primary: '#f4e6e3',
+  secondary: '#d1512c',
+  textPrimary: '#130b09',
+  textSecondary: '#f4e6e3',
+  buttonBackground: '#d1512c',
+  buttonText: '#f4e6e3',
   successButtonBackground: '#28a745',
   dangerButtonBackground: '#dc3545',
   borderColor: '#ccc',

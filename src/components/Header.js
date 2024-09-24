@@ -23,10 +23,10 @@ const Header = () => {
 
   // Define dynamic background color for Navbar based on theme
   const navbarBackgroundColor =
-    theme.primary === '#d6dcdc' ? '#d1d7d7' : '#111113'; // Light grey for light theme, dark shade for dark theme
+    theme.name === 'light' ? '#f4e6e3' : '#111113'; // Light grey for light theme, dark shade for dark theme
 
   // Choose logo based on the current theme
-  const logo = theme.primary === '#d6dcdc' ? lightLogo : darkLogo;
+  const logo = theme.name === 'light' ? lightLogo : darkLogo;
 
   return (
     <Navbar
@@ -45,7 +45,7 @@ const Header = () => {
           <img
             src={logo}
             alt="PlaylistBuddy Logo"
-            style={{ width: '80px', height: 'auto' }} // Set image size
+            style={{ width: '250px', height: 'auto' }} // Set image size
           />
         </Button>
 

@@ -121,7 +121,7 @@ const StepCard = styled.div`
 
 const Login = () => {
   const { theme } = useTheme();
-  const spotifyLogo = theme.primary === '#d6dcdc' ? spotifyDarkLogo : spotifyLightLogo;
+  const spotifyLogo = spotifyDarkLogo;
 
   return (
     <LoginContainer>
