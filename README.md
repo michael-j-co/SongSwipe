@@ -1,81 +1,95 @@
-# PlaylistBuddy
+# SongSwipe 🎶
 
-PlaylistBuddy is a web application that allows users to create and edit Spotify playlists with ease. It leverages the Spotify API to suggest songs and playlists based on user-defined tags and preferences, providing a streamlined and user-friendly experience for music lovers.
+**SongSwipe** is a modern web app that allows users to seamlessly create, edit, and manage their Spotify playlists. With easy swipe-based song selection and playlist editing, SongSwipe integrates with Spotify’s API to make playlist management simple and fun.
 
-## Table of Contents
+---
 
-- [Features](#features)
-- [Demo](#demo)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
+## Features 🚀
 
-## Features
+- **Swipe through songs** to quickly find and add your favorites.
+- **Create and edit playlists** directly from the app.
+- **Spotify integration** to sync and manage your music library.
+- **Dark/Light mode** support, automatically based on your system or manual preference.
+- **Easily share** playlists with friends.
+- **Custom playlist suggestions** based on your listening habits.
 
-- **User Authentication**: Log in with your Spotify account to access your playlists.
-- **Create Playlists**: Enter playlist details such as title and description to create a playlist on your spotify in real time.
-- **Edit Playlists**: Select an existing playlist from your Spotify profile to be edited.
-- **Playlist Searching**:  Search for playlists created by spotify and other users to pull from when creating your own playlist.
-- **Track Suggestion**: Swipe through suggested tracks from the playlists selected.
-- **Share Playlists**: Share the link to your newly edited or created playlist with others.
-- **Dark Mode**: Clean and modern dark-themed user interface.
+---
 
-## Demo
+## Prerequisites 🛠
 
-A live demo of the app is available [here](#). 
-This app is currently in development mode and is availble for up to 25 users. Spots are available - Contact me if you would like to test the app for yourself!
+Before running SongSwipe, ensure you have the following installed:
+
+- **Node.js** (v14.x or higher)
+- **npm** (Node package manager) or **yarn** (alternative package manager)
+- A **Spotify Developer Account** (to obtain your Spotify API credentials)
+
+---
 
 ## Installation
 
-To run SongSwipe locally, follow these steps:
+To set up SongSwipe on your local machine, follow these steps:
 
-1. **Clone the repository**:
+### 1. Clone the repository
 
-   ```bash
-   git clone https://github.com/your-username/PlaylistBuddy.git
-   cd PlaylistBuddy
+```bash
+git clone https://github.com/your-username/songswipe.git
+cd songswipe
+```
 
-2. **Install the dependencies**:
-    ```bash
-    npm install
+### 2. Install dependencies
 
-3. **Set up environment variables:**
-    Create a .env file in the root directory and add your Spotify API credentials:
+Using npm:
 
-    ```bash
-    REACT_APP_SPOTIFY_CLIENT_ID=your_spotify_client_id
-    REACT_APP_SPOTIFY_REDIRECT_URI=http://localhost:3000/callback
-    REACT_APP_SPOTIFY_SCOPE=user-read-private user-read-email playlist-modify-public playlist-modify-private
+```bash
+npm install
+```
 
-4. **Start the development server:**
-    ```bash
-    npm start
+Using yarn:
 
-## Usage
+```bash
+yarn install
+```
 
-Log In: Click the "Log in with Spotify" button and authenticate with your Spotify account.
-Create a New Playlist:
-Enter playlist details: title, description, tags, and privacy settings.
-Select existing playlists to use for track suggestions.
-Choose tracks to add to your new playlist.
-Edit an Existing Playlist:
-Navigate to the "Edit Playlist" section.
-Select a playlist and modify its tracks and details.
+### 3. Spotify API setup
 
-## Contributing
-Contributions are welcome! If you'd like to improve this project, please follow these steps:
-    Fork the repository.
-    Create a new branch: git checkout -b feature-branch-name.
-    Make your changes and commit them: git commit -m 'Add some feature'.
-    Push to the branch: git push origin feature-branch-name.
-    Create a pull request.
-Please make sure your code is well-tested.
+To connect to the Spotify API, you need to create an `.env` file in the root directory with your Spotify credentials:
 
-## Contact
-If you have any questions or feedback, feel free to reach out:
+Create a file named `.env` and add the following lines:
 
-Name: Michael Co
-Email: michaelco@ucla.edu
-GitHub: michael-j-co
+```bash
+REACT_APP_SPOTIFY_CLIENT_ID=your_spotify_client_id
+REACT_APP_SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
+REACT_APP_REDIRECT_URI=http://localhost:3000/callback
+```
+
+Make sure to replace the values with your actual **Spotify Client ID** and **Client Secret** obtained from your Spotify Developer dashboard.
+
+---
+
+## Running the App 🚀
+
+Once you've installed the dependencies and set up your `.env` file, run the app locally:
+
+```bash
+npm start
+```
+
+Or, if using yarn:
+
+```bash
+yarn start
+```
+
+This will start the development server, and you can view the app in your browser at `http://localhost:3000`.
+
+---
+
+## Contributing 🤝
+
+Feel free to fork this repository and submit pull requests. All contributions are welcome!
+
+---
+
+## License 📄
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.
