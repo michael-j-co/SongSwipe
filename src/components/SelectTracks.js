@@ -210,7 +210,7 @@ const SelectTracks = ({ accessToken }) => {
       className="d-flex flex-column justify-content-center align-items-center"
       style={{
         minHeight: '100vh',
-        backgroundColor: theme.background, // Use theme background color
+        backgroundColor: theme.primary, // Use theme background color
         color: theme.textPrimary, // Use theme text color
         padding: '20px',
       }}

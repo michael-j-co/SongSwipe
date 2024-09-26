@@ -15,7 +15,7 @@ const LoginContainer = styled.div`
   padding-top: 100px;
   max-width: 1200px;
   margin: 0 auto;
-  background-color: ${({ theme }) => theme.background};
+  background-color: ${({ theme }) => theme.primary};
   text-align: left;
   transition: background-color 0.3s ease;
 
@@ -180,13 +180,13 @@ const Login = () => {
         <WelcomeTitle>Welcome to SongSwipe</WelcomeTitle>
         <Text>Your Personalized Playlist Experience</Text>
         <Text>
-          Discover a new way to create personalized playlists with ease. Connect your Spotify account and let SongSwipe curate the perfect soundtrack for your mood and activities. Swipe, organize, and share your favorite tracks effortlessly.
+          Playlist creation made fun and easy. Connect your Spotify account and let SongSwipe curate the perfect soundtrack for your mood and activities. Swipe, organize, and share your favorite tracks effortlessly.
         </Text>
         <LoginButton onClick={() => window.location.href = getSpotifyAuthUrl()}>
           Login with Spotify
         </LoginButton>
         <SpotifyCredibility>
-          <Text>Made for Spotify</Text>
+          <Text>Made for</Text>
           <SpotifyLogo src={spotifyLogo} />
         </SpotifyCredibility>
       </LeftSection>

@@ -9,7 +9,7 @@ const AccessDeniedContainer = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: ${({ theme }) => theme.background};
+  background-color: ${({ theme }) => theme.primary};
 `;
 
 const Title = styled.h1`

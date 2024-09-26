@@ -64,7 +64,7 @@ const Header = () => {
   };
 
   // Select the appropriate logo based on theme
-  const logo = theme.name === 'light' ? lightLogo : darkLogo;
+  const logo = theme.primary === '#f4e6e3' ? lightLogo : darkLogo;
 
   return (
     <HeaderContainer>

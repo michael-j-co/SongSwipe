@@ -143,7 +143,7 @@ const SearchAndSelectPlaylists = () => {
 
   const sortPlaylists = (option) => {
     let sortedPlaylists = [...playlists];
-
+  
     switch (option) {
       case 'A-Z':
         sortedPlaylists.sort((a, b) => a.name.localeCompare(b.name));
@@ -156,11 +156,20 @@ const SearchAndSelectPlaylists = () => {
         break;
       case 'Recommended':
       default:
+        // Sort by recommended by placing Spotify playlists at the top
+        sortedPlaylists.sort((a, b) => {
+          const isSpotifyA = a.owner.id === 'spotify';
+          const isSpotifyB = b.owner.id === 'spotify';
+          if (isSpotifyA && !isSpotifyB) return -1; // a is Spotify, b is not -> a first
+          if (!isSpotifyA && isSpotifyB) return 1;  // b is Spotify, a is not -> b first
+          return 0; // If both are Spotify or neither, leave them as is
+        });
         break;
     }
-
+  
     setPlaylists(sortedPlaylists);
   };
+  
 
   const handleSortChange = (event) => {
     const selectedOption = event.target.value;
@@ -173,7 +182,7 @@ const SearchAndSelectPlaylists = () => {
       className="d-flex flex-column justify-content-center align-items-center"
       style={{
         minHeight: '100vh',
-        backgroundColor: theme.background,
+        backgroundColor: theme.primary,
         color: theme.textPrimary,
         padding: '20px',
       }}

@@ -43,7 +43,7 @@ const EditPlaylist = ({ accessToken }) => {
     <Container
       className="mt-5 d-flex flex-column justify-content-center align-items-center"
       style={{
-        backgroundColor: theme.background, // Use theme background color
+        backgroundColor: theme.primary, // Use theme background color
         color: theme.textPrimary, // Use theme text color
         minHeight: '100vh',
         padding: '20px',
@@ -87,7 +87,7 @@ const EditPlaylist = ({ accessToken }) => {
                   <Button
                     onClick={() => handleEditPlaylist(playlist.id)}
                     style={{
-                      backgroundColor: theme.successButtonBackground, // Use theme success button background
+                      backgroundColor: theme.buttonBackground, // Use theme success button background
                       color: theme.buttonText, // Use theme button text color
                       border: 'none',
                       padding: '10px 20px',

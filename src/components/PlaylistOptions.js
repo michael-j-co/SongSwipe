@@ -56,7 +56,7 @@ const PlaylistOptions = () => {
       className="d-flex flex-column justify-content-center align-items-center"
       style={{
         minHeight: '100vh',
-        backgroundColor: theme.background, // Use theme background color
+        backgroundColor: theme.primary, // Use theme background color
         padding: '20px',
       }}
     >
