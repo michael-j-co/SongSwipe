@@ -1,8 +1,17 @@
 import React, { useState } from 'react';
-import { Container, Form, Button, Spinner, Tooltip, OverlayTrigger, Toast, ToastContainer } from 'react-bootstrap';
+import {
+  Container,
+  Form,
+  Button,
+  Spinner,
+  Toast,
+  ToastContainer,
+  OverlayTrigger,
+  Tooltip,
+} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
-import { useDebouncedCallback } from 'use-debounce';
+import './CreatePlaylistForm.css';  // Add this for custom CSS
 
 const CreatePlaylistForm = ({ accessToken }) => {
   const [playlistName, setPlaylistName] = useState('');
@@ -21,13 +30,10 @@ const CreatePlaylistForm = ({ accessToken }) => {
       return;
     }
     setLoading(true);
-    navigate('/search-playlists', { state: { playlistName, description, isPublic, accessToken } });
+    navigate('/search-playlists', {
+      state: { playlistName, description, isPublic, accessToken },
+    });
   };
-
-  const debouncedSetPlaylistName = useDebouncedCallback((value) => {
-    setPlaylistName(value);
-    setError('');
-  }, 300);
 
   return (
     <Container
@@ -40,16 +46,23 @@ const CreatePlaylistForm = ({ accessToken }) => {
         paddingBottom: '10vh',
       }}
     >
+      {/* Error toast */}
       <ToastContainer position="top-end" className="p-3">
-        <Toast onClose={() => setError('')} show={!!error} delay={3000} autohide bg="danger">
-          <Toast.Body>{error}</Toast.Body>
+        <Toast onClose={() => setError('')} show={!!error} delay={3000} autohide>
+          <Toast.Body style={{ color: theme.textPrimary }}>{error}</Toast.Body>
         </Toast>
       </ToastContainer>
-      
-      <h2 className="mb-4" style={{ color: theme.textPrimary }}>Create a New Playlist</h2>
-      
-      {/* Remove spring animation and animated.div */}
-      <Form className="mb-4" onSubmit={handleNext} style={{ width: '100%', maxWidth: '500px' }}>
+
+      <h2 className="mb-4" style={{ color: theme.textPrimary }}>
+        Create a New Playlist
+      </h2>
+
+      <Form
+        className="mb-4"
+        onSubmit={handleNext}
+        style={{ width: '100%', maxWidth: '500px' }}
+      >
+        {/* Playlist Name Input */}
         <Form.Group className="mb-3">
           <Form.Label style={{ color: theme.textPrimary }}>
             Playlist Name <span style={{ color: theme.dangerButtonBackground }}>*</span>
@@ -57,12 +70,14 @@ const CreatePlaylistForm = ({ accessToken }) => {
           <Form.Control
             type="text"
             value={playlistName}
-            onChange={(e) => debouncedSetPlaylistName(e.target.value)}
+            onChange={(e) => {
+              setPlaylistName(e.target.value);
+              setError('');
+            }}
             style={{
               backgroundColor: theme.inputBackground,
               color: theme.inputText,
-              borderColor: theme.inputBorder,
-              transition: 'border-color 0.2s ease',
+              borderColor: theme.borderColor,
             }}
             isInvalid={!!error}
           />
@@ -71,8 +86,11 @@ const CreatePlaylistForm = ({ accessToken }) => {
           </Form.Control.Feedback>
         </Form.Group>
 
+        {/* Playlist Description Input */}
         <Form.Group className="mb-3">
-          <Form.Label style={{ color: theme.textPrimary }}>Playlist Description</Form.Label>
+          <Form.Label style={{ color: theme.textPrimary }}>
+            Playlist Description
+          </Form.Label>
           <Form.Control
             as="textarea"
             rows={3}
@@ -81,27 +99,41 @@ const CreatePlaylistForm = ({ accessToken }) => {
             style={{
               backgroundColor: theme.inputBackground,
               color: theme.inputText,
-              borderColor: theme.inputBorder,
-              transition: 'border-color 0.2s ease',
-              height: '100px', // Fixed height
-              userSelect: 'none', // Prevent selection/dragging
+              borderColor: theme.borderColor,
+              height: '100px',
             }}
-            draggable={false} // Disable drag
           />
         </Form.Group>
 
+        {/* Custom Styled Public Checkbox */}
         <Form.Group className="mb-3 d-flex align-items-center">
-          <OverlayTrigger overlay={<Tooltip>Check this to make your playlist public and shareable.</Tooltip>}>
-            <Form.Check
-              type="checkbox"
-              label="Public"
-              checked={isPublic}
-              onChange={(e) => setIsPublic(e.target.checked)}
-              style={{ color: theme.textPrimary, marginLeft: '5px' }}
-            />
+          <OverlayTrigger
+            overlay={<Tooltip>Check this to make your playlist public and shareable.</Tooltip>}
+          >
+            <div className="custom-checkbox-wrapper" style={{
+              '--checkbox-bg': theme.inputBackground,
+              '--checkbox-border': theme.borderColor,
+              '--checkbox-checked-bg': theme.buttonBackground,
+              '--checkbox-checked-border': theme.buttonBackground,
+              '--checkbox-checkmark-color': theme.buttonText,
+              '--checkbox-focus': theme.textPrimary,
+              '--label-color': theme.textPrimary
+            }}>
+              <input
+                type="checkbox"
+                id="public-checkbox"
+                className="custom-checkbox"
+                checked={isPublic}
+                onChange={(e) => setIsPublic(e.target.checked)}
+              />
+              <label htmlFor="public-checkbox" className="custom-checkbox-label">
+                <span>Public</span>
+              </label>
+            </div>
           </OverlayTrigger>
         </Form.Group>
 
+        {/* Submit Button */}
         <Button
           type="submit"
           style={{
@@ -110,18 +142,17 @@ const CreatePlaylistForm = ({ accessToken }) => {
             border: 'none',
             width: '100%',
             padding: '10px 0',
-            transition: 'background-color 0.3s ease, transform 0.2s ease',
           }}
           disabled={loading}
-          onMouseEnter={(e) => e.target.style.opacity = 0.8}
-          onMouseLeave={(e) => e.target.style.opacity = 1}
         >
           {loading ? (
             <>
               <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" className="me-2" />
               Processing...
             </>
-          ) : 'Next'}
+          ) : (
+            'Next'
+          )}
         </Button>
       </Form>
     </Container>

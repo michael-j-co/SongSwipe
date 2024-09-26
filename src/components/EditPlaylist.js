@@ -54,7 +54,9 @@ const EditPlaylist = ({ accessToken }) => {
       </h2>
 
       {loading ? ( // Show loading spinner while loading
-        <Spinner animation="border" variant="primary" />
+        <Spinner animation="border" role="status" style={{ color: theme.buttonBackground }}>
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
       ) : error ? ( // Show error message if there is an error
         <p style={{ color: theme.textPrimary }}>{error}</p>
       ) : playlists.length === 0 ? ( // Show message if there are no playlists

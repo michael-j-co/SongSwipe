@@ -201,7 +201,7 @@ const SearchAndSelectPlaylists = () => {
               placeholder="e.g., gym, chill, driving"
               style={{
                 backgroundColor: theme.inputBackground,
-                color: theme.textPrimary,
+                color: "#000000",
                 borderColor: theme.inputBorder,
               }}
             />
