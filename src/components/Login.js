@@ -195,8 +195,8 @@ const Login = () => {
         {[
           { step: 'Step 1', description: 'Connect to Spotify' },
           { step: 'Step 2', description: 'Create a new playlist or edit an existing one' },
-          { step: 'Step 3', description: 'Swipe to choose songs' },
-          { step: 'Step 4', description: 'Organize and save your playlist' },
+          { step: 'Step 3', description: 'Input descriptors' },
+          { step: 'Step 4', description: 'Swipe through songs' },
           { step: 'Step 5', description: 'Enjoy and share your playlist' },
         ].map((item, index) => (
           <Step key={index} number={index + 1} step={item.step} description={item.description} />

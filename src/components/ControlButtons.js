@@ -1,16 +1,25 @@
 import React from 'react';
 import { Button, Row, Col } from 'react-bootstrap';
 import { FaUndoAlt, FaTimes, FaCheck, FaForward } from 'react-icons/fa'; // Import icons
+import { useTheme } from '../context/ThemeContext'; // Corrected import, useTheme is used here
 
 const ControlButtons = ({ handleAcceptTrack, handleRejectTrack, handleUndo, handleSkipToNextPlaylist }) => {
+  const { theme } = useTheme(); // Get theme from the useTheme hook
+
+  // Use the colors from the theme for button styling
+  const buttonStyle = {
+    backgroundColor: theme.buttonBackground,
+    color: theme.buttonText,
+    borderColor: theme.borderColor,
+  };
+
   return (
     <Row className="justify-content-center align-items-center my-4">
       {/* Undo Button (Small) */}
       <Col xs={2} className="d-flex justify-content-center">
         <Button
-          variant="outline-warning"
+          style={{ ...buttonStyle, width: '50px', height: '50px' }}
           className="rounded-circle"
-          style={{ width: '50px', height: '50px' }}
           onClick={handleUndo}
         >
           <FaUndoAlt size={24} />
@@ -20,9 +29,8 @@ const ControlButtons = ({ handleAcceptTrack, handleRejectTrack, handleUndo, hand
       {/* Reject Button (Big) */}
       <Col xs={4} className="d-flex justify-content-center">
         <Button
-          variant="outline-danger"
+          style={{ ...buttonStyle, backgroundColor: theme.dangerButtonBackground, width: '80px', height: '80px' }}
           className="rounded-circle"
-          style={{ width: '80px', height: '80px' }}
           onClick={handleRejectTrack}
         >
           <FaTimes size={36} />
@@ -32,9 +40,8 @@ const ControlButtons = ({ handleAcceptTrack, handleRejectTrack, handleUndo, hand
       {/* Accept Button (Big) */}
       <Col xs={4} className="d-flex justify-content-center">
         <Button
-          variant="outline-success"
+          style={{ ...buttonStyle, backgroundColor: theme.successButtonBackground, width: '80px', height: '80px' }}
           className="rounded-circle"
-          style={{ width: '80px', height: '80px' }}
           onClick={handleAcceptTrack}
         >
           <FaCheck size={36} />
@@ -44,9 +51,8 @@ const ControlButtons = ({ handleAcceptTrack, handleRejectTrack, handleUndo, hand
       {/* Skip Button (Small) */}
       <Col xs={2} className="d-flex justify-content-center">
         <Button
-          variant="outline-primary"
+          style={{ ...buttonStyle, width: '50px', height: '50px' }}
           className="rounded-circle"
-          style={{ width: '50px', height: '50px' }}
           onClick={handleSkipToNextPlaylist}
         >
           <FaForward size={24} />

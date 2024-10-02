@@ -2,7 +2,7 @@ import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Container, Button } from 'react-bootstrap';
 import { useTheme } from '../context/ThemeContext'; // Import the ThemeContext hook
-import { FaCheckCircle } from 'react-icons/fa'; // Import an icon for visual feedback
+import { FaCheckCircle, FaShareAlt } from 'react-icons/fa'; // Import icons for visual feedback
 
 const PlaylistCreated = () => {
   const location = useLocation();
@@ -18,6 +18,40 @@ const PlaylistCreated = () => {
     );
   }
 
+  // Function to handle sharing the playlist link
+  const handleShare = () => {
+    const shareData = {
+      title: playlist.name,
+      text: `Check out this playlist I made using SongSwipe: ${playlist.name}!`,
+      url: playlist.external_urls.spotify,
+    };
+
+    if (navigator.share) {
+      // Use the Web Share API if available
+      navigator
+        .share(shareData)
+        .catch((error) => console.error('Error sharing:', error));
+    } else {
+      // Fallback: Create a mailto link or copy to clipboard
+      const message = `${shareData.text}\n${shareData.url}`;
+      const mailtoLink = `mailto:?subject=${encodeURIComponent(
+        shareData.title
+      )}&body=${encodeURIComponent(message)}`;
+
+      // Open email client or fallback to copying the message to clipboard
+      if (window.confirm('Do you want to share via email?')) {
+        window.location.href = mailtoLink;
+      } else {
+        navigator.clipboard
+          .writeText(message)
+          .then(() => alert('Playlist link and message copied to clipboard!'))
+          .catch((error) =>
+            console.error('Error copying to clipboard:', error)
+          );
+      }
+    }
+  };
+
   return (
     <Container
       className="d-flex flex-column justify-content-center align-items-center text-center"
@@ -29,7 +63,12 @@ const PlaylistCreated = () => {
       }}
     >
       {/* Success Icon and Heading */}
-      <FaCheckCircle size={60} color={theme.successButtonBackground} className="mb-4" /> {/* Success icon */}
+      <FaCheckCircle
+        size={60}
+        color={theme.successButtonBackground}
+        className="mb-4"
+      />{' '}
+      {/* Success icon */}
       <h2 className="mb-3" style={{ color: theme.textPrimary }}>
         Playlist Created Successfully!
       </h2>
@@ -57,6 +96,29 @@ const PlaylistCreated = () => {
         className="mb-3" // Margin bottom for spacing
       >
         Listen on Spotify
+      </Button>
+
+      {/* Share Button */}
+      <Button
+        onClick={handleShare}
+        style={{
+          backgroundColor: theme.buttonBackground,
+          color: theme.buttonText,
+          border: 'none',
+          padding: '10px 20px',
+          fontSize: '1.2rem',
+          fontWeight: '600',
+          borderRadius: '5px',
+          transition: 'background-color 0.3s ease, transform 0.2s ease',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+        onMouseEnter={(e) => (e.target.style.opacity = 0.8)} // Hover effect
+        onMouseLeave={(e) => (e.target.style.opacity = 1)}
+        className="mb-3" // Margin bottom for spacing
+      >
+        <FaShareAlt className="me-2" /> {/* Share icon */}
+        Share Playlist
       </Button>
 
       {/* Button to Go to Playlist Options */}

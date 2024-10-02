@@ -1,7 +1,5 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { ThemeProvider } from 'styled-components';
-
-// Define light and dark theme objects
 const lightTheme = {
   name: 'light',
   colors: {
@@ -18,6 +16,7 @@ const lightTheme = {
     inputText: '#051018',
     background: '#ffffff',
     backgroundSecondary: '#f4e6e3',
+    linkColor: '#ffffff', // New link color for light theme
   },
 };
 
@@ -37,8 +36,10 @@ const darkTheme = {
     inputText: '#051018',
     background: '#111113',
     backgroundSecondary: '#1a1a1b',
+    linkColor: '#ffffff', // New link color for dark theme
   },
 };
+
 
 // Organize themes into a single object for scalability
 const themes = { light: lightTheme, dark: darkTheme };

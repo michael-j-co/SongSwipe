@@ -41,7 +41,7 @@ const EditPlaylist = ({ accessToken }) => {
 
   return (
     <Container
-      className="mt-5 d-flex flex-column justify-content-center align-items-center"
+      className="mt-5 pt-5 d-flex flex-column justify-content-center align-items-center"
       style={{
         backgroundColor: theme.primary, // Use theme background color
         color: theme.textPrimary, // Use theme text color
@@ -79,8 +79,12 @@ const EditPlaylist = ({ accessToken }) => {
                 onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
                 onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
               >
-                {playlist.images[0] && (
-                  <Card.Img variant="top" src={playlist.images[0].url} style={{ height: '150px', objectFit: 'cover' }} />
+                {playlist.images && playlist.images.length > 0 && (
+                  <Card.Img
+                    variant="top"
+                    src={playlist.images[0].url}
+                    style={{ height: '150px', objectFit: 'cover' }}
+                  />
                 )}
                 <Card.Body className="d-flex flex-column justify-content-between align-items-center">
                   <Card.Title style={{ color: theme.textPrimary, textAlign: 'center', marginBottom: '10px' }}>

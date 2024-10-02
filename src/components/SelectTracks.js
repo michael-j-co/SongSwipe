@@ -105,7 +105,29 @@ const SelectTracks = ({ accessToken }) => {
       handleNextTrack();
     }, 500);
   };
-
+  const handleSkipPlaylist = async () => {
+    if (currentPlaylistIndex < selectedPlaylists.length - 1) {
+      const nextPlaylistIndex = currentPlaylistIndex + 1;
+  
+      const tracksFetched = await fetchTracksForPlaylist(nextPlaylistIndex);
+      if (tracksFetched) {
+        setCurrentPlaylistIndex(nextPlaylistIndex);
+        setCurrentTrackIndex(0);
+        setActionHistory([
+          ...actionHistory,
+          { type: 'skipPlaylist', playlistIndex: currentPlaylistIndex },
+        ]);
+      } else {
+        alert('Error fetching the next playlist. Please try again.');
+      }
+    } else {
+      alert('You have reviewed all selected playlists!');
+    }
+  
+    setSwipeDirection('');
+  };
+  
+  
   const handleNextTrack = async () => {
     if (currentTrackIndex + 1 < tracks.length) {
       setCurrentTrackIndex(currentTrackIndex + 1);
@@ -228,7 +250,7 @@ const SelectTracks = ({ accessToken }) => {
             handleAcceptTrack={handleAcceptTrack}
             handleRejectTrack={handleRejectTrack}
             handleUndo={handleUndo}
-            handleSkipToNextPlaylist={handleNextTrack}
+            handleSkipToNextPlaylist={handleSkipPlaylist}
           />
         </>
       )}

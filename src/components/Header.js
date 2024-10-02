@@ -58,7 +58,7 @@ const Header = () => {
 
   // Handle Home Click Navigation
   const handleHomeClick = () => {
-    if (window.confirm('Are you sure you want to return to PlaylistBuddy? Your progress will not be saved.')) {
+    if (window.confirm('Are you sure you want to return to SongSwipe? Your progress will not be saved.')) {
       navigate('/playlists');
     }
   };
@@ -75,7 +75,7 @@ const Header = () => {
 
       {/* Theme Toggle Button */}
       <ThemeToggleButton onClick={toggleTheme} aria-label="Toggle Theme">
-        {theme.name === 'dark' ? <FaSun /> : <FaMoon />}
+        {theme.primary === '#111113' ? <FaSun /> : <FaMoon />}
       </ThemeToggleButton>
     </HeaderContainer>
   );
