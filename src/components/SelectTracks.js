@@ -3,18 +3,17 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import axios from 'axios';
 import './SelectTracks.css';
-import FinishNewPlaylist from './FinishNewPlaylist';
-import UpdatePlaylist from './UpdatePlaylist';
 import PlaylistInfo from './PlaylistInfo';
 import TrackPlayer from './TrackPlayer';
 import ControlButtons from './ControlButtons';
 import AcceptedTracksPreview from './AcceptedTracksPreview';
-import { useTheme } from '../context/ThemeContext'; // Import the ThemeContext hook
+import { useTheme } from '../context/ThemeContext';
+import { useSwipeable } from 'react-swipeable';
 
 const SelectTracks = ({ accessToken }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { theme } = useTheme(); // Access the current theme
+  const { theme } = useTheme();
   const { selectedPlaylists, playlistName, playlistDescription, isPublic, editingPlaylistId } = location.state || { selectedPlaylists: [] };
 
   const [tracks, setTracks] = useState([]);
@@ -25,7 +24,7 @@ const SelectTracks = ({ accessToken }) => {
   const [seenTracks, setSeenTracks] = useState(new Set());
   const [actionHistory, setActionHistory] = useState([]);
   const [existingTracks, setExistingTracks] = useState(new Set());
-  const [swipeDirection, setSwipeDirection] = useState(''); // State for swipe animation
+  const [swipeDirection, setSwipeDirection] = useState('');
 
   const fetchExistingPlaylistTracks = useCallback(async () => {
     if (!editingPlaylistId || !accessToken) return;
@@ -105,6 +104,7 @@ const SelectTracks = ({ accessToken }) => {
       handleNextTrack();
     }, 500);
   };
+
   const handleSkipPlaylist = async () => {
     if (currentPlaylistIndex < selectedPlaylists.length - 1) {
       const nextPlaylistIndex = currentPlaylistIndex + 1;
@@ -126,8 +126,7 @@ const SelectTracks = ({ accessToken }) => {
   
     setSwipeDirection('');
   };
-  
-  
+
   const handleNextTrack = async () => {
     if (currentTrackIndex + 1 < tracks.length) {
       setCurrentTrackIndex(currentTrackIndex + 1);
@@ -227,13 +226,21 @@ const SelectTracks = ({ accessToken }) => {
     };
   }, [handleAcceptTrack, handleRejectTrack]);
 
+  const handlers = useSwipeable({
+    onSwipedLeft: handleRejectTrack,
+    onSwipedRight: handleAcceptTrack,
+    preventDefaultTouchmoveEvent: true,
+    trackMouse: true,
+  });
+
   return (
     <Container
+      {...handlers}
       className="d-flex flex-column justify-content-center align-items-center"
       style={{
         minHeight: '100vh',
-        backgroundColor: theme.primary, // Use theme background color
-        color: theme.textPrimary, // Use theme text color
+        backgroundColor: theme.primary,
+        color: theme.textPrimary,
         padding: '20px',
       }}
     >

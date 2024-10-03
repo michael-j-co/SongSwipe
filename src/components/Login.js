@@ -172,7 +172,7 @@ const Step = ({ number, step, description }) => (
 const Login = () => {
   const { theme } = useTheme();
   const { name, background, textPrimary } = theme; // Destructured for readability
-  const spotifyLogo = name === 'dark' ? spotifyLightLogo : spotifyDarkLogo;
+  const spotifyLogo = theme.primary === '#f4e6e3' ? spotifyDarkLogo : spotifyLightLogo;
 
   return (
     <LoginContainer>

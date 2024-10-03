@@ -17,6 +17,7 @@
     "react-router-dom": "^6.26.1",
     "react-scripts": "^3.0.1",
     "react-spring": "^9.7.4",
+    "react-swipeable": "^7.0.1",
     "styled-components": "^6.1.13",
     "use-debounce": "^10.0.3",
     "web-vitals": "^2.1.4"
