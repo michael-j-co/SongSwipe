@@ -1,6 +1,6 @@
 // src/utils/spotifyAuth.js
 
-const clientId = '0291931c55c94124adde3ce9066a5162';
+const clietnId = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
 const redirectUri = process.env.REACT_APP_SPOTIFY_REDIRECT_URI;
 
 const scopes = [
@@ -11,6 +11,7 @@ const scopes = [
   'user-read-private',
   'user-read-email', // We need this to fetch the user's email
 ];
+
 
 // Generate the Spotify Authorization URL
 export const getSpotifyAuthUrl = () => {
