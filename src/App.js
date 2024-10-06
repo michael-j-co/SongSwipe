@@ -12,7 +12,7 @@ import SelectTracks from './components/SelectTracks';
 import PlaylistCreated from './components/PlaylistCreated';
 import Header from './components/Header';
 import Footer from './components/Footer'; // Import Footer component
-import { CustomThemeProvider, useTheme } from './context/ThemeContext';
+import { CustomThemeProvider} from './context/ThemeContext';
 
 // Styled component for App container
 const AppContainer = styled.div`

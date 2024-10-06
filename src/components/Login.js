@@ -5,6 +5,14 @@ import { getSpotifyAuthUrl } from '../utils/spotifyAuth';
 import spotifyLightLogo from '../assets/spotifydark.png';
 import spotifyDarkLogo from '../assets/spotifylight.png';
 
+// Wrapper Container to ensure the banner is on top
+const Wrapper = styled.div`
+  width: 100%;
+  margin-top: 120px;
+`;
+
+
+
 // Responsive Layout
 const LoginContainer = styled.div`
   display: flex;
@@ -12,7 +20,7 @@ const LoginContainer = styled.div`
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  padding-top: 100px;
+  padding-top: 50px;
   max-width: 1200px;
   margin: 0 auto;
   background-color: ${({ theme }) => theme.primary};
@@ -35,7 +43,25 @@ const slideUp = keyframes`
     opacity: 1;
   }
 `;
+// Banner Container for the Development Mode Notice
+const DevelopmentBanner = styled.div`
+  width: 100%;
+  background-color: rgba(255, 204, 0, 0.9); // Softer yellow to make it less intense
+  color: #333;
+  padding: 1rem 2rem;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 8px;
+  margin: 0 auto;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  max-width: 1200px;
+  animation: ${slideUp} 0.5s ease-out;
 
+  @media (min-width: 768px) {
+    padding: 1rem 4rem;
+    text-align: left;
+  }
+`;
 const LeftSection = styled.div`
   flex: 1;
   display: flex;
@@ -175,34 +201,39 @@ const Login = () => {
   const spotifyLogo = theme.primary === '#f4e6e3' ? spotifyDarkLogo : spotifyLightLogo;
 
   return (
-    <LoginContainer>
-      <LeftSection>
-        <WelcomeTitle>Welcome to SongSwipe</WelcomeTitle>
-        <Text>Your Personalized Playlist Experience</Text>
-        <Text>
-          Playlist creation made fun and easy. Connect your Spotify account and let SongSwipe curate the perfect soundtrack for your mood and activities. Swipe, organize, and share your favorite tracks effortlessly.
-        </Text>
-        <LoginButton onClick={() => window.location.href = getSpotifyAuthUrl()}>
-          Login with Spotify
-        </LoginButton>
-        <SpotifyCredibility>
-          <Text>Made for</Text>
-          <SpotifyLogo src={spotifyLogo} />
-        </SpotifyCredibility>
-      </LeftSection>
-      <RightSection>
-        <h3>How it Works</h3>
-        {[
-          { step: 'Step 1', description: 'Connect to Spotify' },
-          { step: 'Step 2', description: 'Create a new playlist or edit an existing one' },
-          { step: 'Step 3', description: 'Input descriptors' },
-          { step: 'Step 4', description: 'Swipe through songs' },
-          { step: 'Step 5', description: 'Enjoy and share your playlist' },
-        ].map((item, index) => (
-          <Step key={index} number={index + 1} step={item.step} description={item.description} />
-        ))}
-      </RightSection>
-    </LoginContainer>
+    <Wrapper>
+      <DevelopmentBanner>
+      🚧 Heads Up! SongSwipe is currently in development mode, and access is limited to approved users. If you’d like to test out the app, please contact comichael.j@gmail.com.
+      </DevelopmentBanner>
+      <LoginContainer>
+        <LeftSection>
+          <WelcomeTitle>Welcome to SongSwipe</WelcomeTitle>
+          <Text>Your Personalized Playlist Experience</Text>
+          <Text>
+            Playlist creation made fun and easy. Connect your Spotify account and let SongSwipe curate the perfect soundtrack for your mood and activities. Swipe, organize, and share your favorite tracks effortlessly.
+          </Text>
+          <LoginButton onClick={() => window.location.href = getSpotifyAuthUrl()}>
+            Login with Spotify
+          </LoginButton>
+          <SpotifyCredibility>
+            <Text>Made for</Text>
+            <SpotifyLogo src={spotifyLogo} />
+          </SpotifyCredibility>
+        </LeftSection>
+        <RightSection>
+          <h3>How it Works</h3>
+          {[
+            { step: 'Step 1', description: 'Connect to Spotify' },
+            { step: 'Step 2', description: 'Create a new playlist or edit an existing one' },
+            { step: 'Step 3', description: 'Input descriptors' },
+            { step: 'Step 4', description: 'Swipe through songs' },
+            { step: 'Step 5', description: 'Enjoy and share your playlist' },
+          ].map((item, index) => (
+            <Step key={index} number={index + 1} step={item.step} description={item.description} />
+          ))}
+        </RightSection>
+      </LoginContainer>
+    </Wrapper>
   );
 };
 
