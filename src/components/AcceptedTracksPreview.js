@@ -46,21 +46,13 @@ const AcceptedTracksPreview = ({ acceptedTracks, editingPlaylistId, accessToken,
       {/* Action Buttons */}
       <div style={{ textAlign: 'center', marginTop: '30px' }}>
         {!editingPlaylistId ? (
-          <Button
-            style={{
-              backgroundColor: theme.successButtonBackground,
-              border: `1px solid ${theme.successButtonBackground}`,
-              color: theme.buttonText,
-              padding: '12px 24px',
-              borderRadius: '6px',
-              fontWeight: 'bold',
-              cursor: 'pointer',
-            }}
-            onMouseOver={(e) => e.target.style.opacity = 0.9}
-            onMouseOut={(e) => e.target.style.opacity = 1}
-          >
-            Finish and Add Tracks to Playlist
-          </Button>
+          <FinishNewPlaylist
+            accessToken={accessToken}
+            playlistName={playlistName}
+            playlistDescription={playlistDescription}
+            isPublic={isPublic}
+            acceptedTracks={acceptedTracks}
+          />
         ) : (
           <UpdatePlaylist 
             accessToken={accessToken} 
