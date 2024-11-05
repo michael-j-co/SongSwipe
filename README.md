@@ -2,6 +2,8 @@
 
 **SongSwipe** is a modern web app that allows users to seamlessly create, edit, and manage their Spotify playlists. With easy swipe-based song selection and playlist editing, SongSwipe integrates with Spotify’s API to make playlist management simple and fun.
 
+**Video Demo** https://drive.google.com/file/d/1lNdeiVghiQJ1OvFZuihbzsemFG49CnfZ/view?usp=drive_link
+
 ---
 
 ## Features 🚀
@@ -89,7 +91,3 @@ This will start the development server, and you can view the app in your browser
 Feel free to fork this repository and submit pull requests. All contributions are welcome!
 
 ---
-
-## License 📄
-
-This project is licensed under the MIT License. See the `LICENSE` file for details.
